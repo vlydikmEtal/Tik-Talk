@@ -34,7 +34,7 @@ export class AuthService {
       fd
     ).pipe(
       tap(val => {
-        this.token = val.acces_token
+        this.token = val.access_token
         this.refreshToken = val.refresh_token
 
         this.cookieService.set('token', this.token)
