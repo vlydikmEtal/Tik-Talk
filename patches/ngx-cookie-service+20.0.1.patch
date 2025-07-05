@@ -1,0 +1,13 @@
+diff --git a/node_modules/ngx-cookie-service/fesm2022/ngx-cookie-service.mjs b/node_modules/ngx-cookie-service/fesm2022/ngx-cookie-service.mjs
+index 98d5fa6..8beb964 100644
+--- a/node_modules/ngx-cookie-service/fesm2022/ngx-cookie-service.mjs
++++ b/node_modules/ngx-cookie-service/fesm2022/ngx-cookie-service.mjs
+@@ -1,6 +1,7 @@
+ import { isPlatformBrowser } from '@angular/common';
+ import * as i0 from '@angular/core';
+-import { DOCUMENT, PLATFORM_ID, Inject, Injectable } from '@angular/core';
++import { PLATFORM_ID, Inject, Injectable } from '@angular/core';
++import { DOCUMENT } from '@angular/common';
+ 
+ class CookieService {
+     constructor(document, // Get the `PLATFORM_ID` so we can check if we're in a browser.
