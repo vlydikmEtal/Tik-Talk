@@ -1,14 +1,12 @@
 import { Router } from '@angular/router';
 import { AuthService } from './../../auth/auth.service';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import {
   FormGroup,
   FormControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { from } from 'rxjs';
-import { map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login-page',
@@ -20,6 +18,8 @@ import { map, take } from 'rxjs/operators';
 export class LoginPageComponent {
   AuthService = inject(AuthService);
   router = inject(Router);
+
+  isPasswordVisible = signal<boolean>(false)
 
   form = new FormGroup({
     username: new FormControl <string | null> (null, Validators.required),

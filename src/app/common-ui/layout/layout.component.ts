@@ -11,10 +11,4 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
-  ProfileService = inject(ProfileService)
-
-  ngOnInit() {
-    console.log('ngOnInint')
-    this.ProfileService.getMe().subscribe(val => console.log(val))
-  }
 }
