@@ -1,0 +1,49 @@
+.profile-search-form {
+  padding: 16px 20px;
+  background: var(--dark-color);
+  border: 1px solid var(--light-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.profile-search-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 300px));
+  gap: 40px;
+  width: 100%;
+}
+
+.profile-form-wrapper {
+  display: flex;
+  border-bottom: 1px solid var(--light-color);
+  align-items: center;
+  transition: all .3s ease;
+  padding: 0 4px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: var(--light-color);
+  }
+
+  &:focus-within {
+    border: 1px solid var(--primary-color);
+    border-radius: 3px;
+
+
+    svg {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.tt-form-filter {
+  display: grid;
+  place-content: center;
+  padding: 14px;
+  background-color: var(--primary-color);
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
