@@ -1,0 +1,33 @@
+<form class="profile-search-form" [formGroup]="searchForm">
+  <div class="profile-search-inputs">
+    <label class="tt-form-label">
+    <span class="tt-form-label__text">Имя пользователя</span>
+
+    <div class="profile-form-wrapper">
+      <input type="text" class="tt-form-input" formControlName="firstName"  placeholder="Выберите"/>
+      <svg icon="search"></svg>
+    </div>
+  </label>
+
+  <label class="tt-form-label">
+    <span class="tt-form-label__text">Фамилия</span>
+
+    <div class="profile-form-wrapper">
+      <input type="text" class="tt-form-input" formControlName="lastName" placeholder="Выберите"/>
+      <svg icon="search"></svg>
+    </div>
+  </label>
+
+  <label class="tt-form-label">
+    <span class="tt-form-label__text">Навыки</span>
+    <div class="profile-form-wrapper">
+      <input type="text" class="tt-form-input" formControlName="stack" placeholder="Выберите"/>
+      <svg icon="search"></svg>
+    </div>
+  </label>
+  </div>
+
+  <button class="tt-form-filter" type="button">
+    <img src="/assets/imgs/svg/filter.svg" alt="">
+  </button>
+</form>

@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 24px;
 }
 
 .to-settings-btn {
@@ -19,6 +20,7 @@
 }
 
 .profile-page__body {
+  padding: 24px;
   display: grid;
   gap: 64px;
   grid-template-columns: 1fr 350px;

@@ -8,11 +8,12 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { SvgIconComponent } from '../../common-ui/svg-icon/svg-icon.component';
 import { RouterLink } from '@angular/router';
 import { ImgUrlPipe } from '../../helpers/pipes/img-url.pipe';
+import { PostFeedComponent } from "./post-feed/post-feed.component";
 
 @Component({
   selector: 'app-profile-page',
   standalone: true,
-  imports: [ProfileHeaderComponent, CommonModule, SvgIconComponent, RouterLink, ImgUrlPipe],
+  imports: [ProfileHeaderComponent, CommonModule, SvgIconComponent, RouterLink, ImgUrlPipe, PostFeedComponent],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
