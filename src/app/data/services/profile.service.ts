@@ -32,7 +32,7 @@ export class ProfileService {
   getSubscribersShortList(subsAmount = 3) {
     return this.http
       .get<Pageble<Profile>>(`${this.baseApiUrl}account/subscribers/`)
-      .pipe(map((res) => res.items.slice(1, subsAmount + 1)));
+      .pipe(map((res) => res.items.slice(0, subsAmount)));
   }
 
   patchProfile(profile: Partial<Profile>) {
