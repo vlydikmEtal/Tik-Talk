@@ -5,7 +5,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { map, switchMap, startWith } from 'rxjs';
-import { ChatService } from '../../data';
+import { ChatService } from '@tt/data-access';
+
 
 @Component({
   selector: 'app-chats-list',

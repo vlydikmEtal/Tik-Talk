@@ -1,7 +1,7 @@
 {
-  "name": "shared",
+  "name": "data-acces",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/src",
+  "sourceRoot": "libs/data-acces/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
@@ -10,8 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/jest.config.ts",
-        "tsConfig": "libs/shared/tsconfig.spec.json"
+        "jestConfig": "libs/data-acces/jest.config.ts",
+        "tsConfig": "libs/data-acces/tsconfig.spec.json"
       }
     },
     "lint": {

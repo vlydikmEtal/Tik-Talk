@@ -2,11 +2,12 @@ import { firstValueFrom, fromEvent, Subscription } from 'rxjs';
 import { Component, inject } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { ElementRef, Renderer2, AfterViewInit, OnDestroy } from '@angular/core';
-import { PostService } from '../../data';
 import { PostInputComponent } from '../../ui';
-import { PostCreateDto } from '../../data/interfaces/post.interfaces';
-import { ProfileService } from '@tt/profile';
 import { PostComponent } from '../post/post.component';
+import { postActions, PostCreateDto, PostService, ProfileService, selectedPosts } from '@tt/data-access';
+import { Store } from '@ngrx/store';
+
+
 
 
 
@@ -20,8 +21,9 @@ import { PostComponent } from '../post/post.component';
 export class PostFeedComponent implements AfterViewInit, OnDestroy {
   postService = inject(PostService);
   profileService = inject(ProfileService);
+  store = inject(Store)
 
-  feed = this.postService.posts;
+  feed = this.store.selectSignal(selectedPosts)
 
   hostElement = inject(ElementRef);
   r2 = inject(Renderer2);
@@ -29,7 +31,7 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
   #resizeSub?: Subscription;
 
   constructor() {
-    firstValueFrom(this.postService.fetchPosts());
+    this.store.dispatch(postActions.postsGet());
   }
 
   ngAfterViewInit() {
@@ -57,6 +59,6 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
     };
 
     await firstValueFrom(this.postService.createPost(dto));
-    await firstValueFrom(this.postService.fetchPosts());
+    this.store.dispatch(postActions.postsGet());
   }
 }

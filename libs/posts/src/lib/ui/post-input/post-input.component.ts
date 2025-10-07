@@ -12,6 +12,10 @@ import { FormsModule } from '@angular/forms';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
 import { GlobalStoreService } from '@tt/shared';
 
+
+
+
+
 @Component({
   selector: 'app-post-input',
   standalone: true,

@@ -4,7 +4,7 @@ import { SubscriberCardComponent } from './subscriber-card/subscriber-card.compo
 import { RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
-import { ProfileService } from '@tt/profile';
+import {ProfileService} from '@tt/data-access'
 
 @Component({
   selector: 'app-sidebar',

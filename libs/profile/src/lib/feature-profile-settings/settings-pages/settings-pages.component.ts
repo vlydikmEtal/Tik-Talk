@@ -1,12 +1,10 @@
 import { firstValueFrom } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { Component, inject, effect, ViewChild } from '@angular/core';
-
 import { FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import { ProfileService } from '../../data';
 import { AvatarUploadComponent, ProfileHeaderComponent } from '../../ui';
+import { ProfileService } from '@tt/data-access';
 
 
 @Component({

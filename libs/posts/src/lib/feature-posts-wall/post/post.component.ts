@@ -1,11 +1,11 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CommentComponent, PostInputComponent } from '../../ui';
-import { Post, PostComment, PostService } from '../../data';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
-import { CommentCreateDto } from '../../data/interfaces/post.interfaces';
 import { TimePipe } from '../../pipes/time.pipe';
-import { ProfileService } from '@tt/profile';
+import { CommentCreateDto, Post, PostComment, PostService, ProfileService } from '@tt/data-access';
+
+
 
 
 @Component({

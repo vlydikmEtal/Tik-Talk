@@ -5,7 +5,8 @@ import { debounceTime } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { ProfileCardComponent } from '../../ui';
 import { ProfileFiltersComponent } from '../profile-filters/profile-filters.component';
-import { ProfileService } from '../../data';
+import { Store } from '@ngrx/store';
+import {  selectFilteredProfiles } from '@tt/data-access';
 
 @Component({
   selector: 'app-search-page',
@@ -15,8 +16,8 @@ import { ProfileService } from '../../data';
   styleUrl: './search-page.component.scss',
 })
 export class SearchPageComponent {
-  ProfileService = inject(ProfileService);
-  profiles = this.ProfileService.filteredProfiles;
+  store = inject(Store)
+  profiles = this.store.selectSignal(selectFilteredProfiles)
 
   hostElement = inject(ElementRef);
   r2 = inject(Renderer2);

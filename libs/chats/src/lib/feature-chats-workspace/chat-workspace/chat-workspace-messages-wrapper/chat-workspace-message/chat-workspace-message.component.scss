@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 32px 1fr;
   gap: 12px;
+  height: min-content;
 }
 
 :host.is-mine {
@@ -12,9 +13,27 @@
     order: -1;
     width: 100%;
   }
+
+  .message-text {
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    background-color: var(--primary-color);
+    color: var(--dark-color);
+  }
+}
+
+.message-time {
+  color: #a0adbb;
+  font-size: 12px;
+}
+
+.message-container {
+  strong {
+    display: inline-block;
+  }
 }
 
 .message-text {
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
   padding: 8px 16px;
   background-color: var(--message-color);
   font-weight: 500;

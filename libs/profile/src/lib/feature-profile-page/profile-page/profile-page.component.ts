@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { switchMap, firstValueFrom } from 'rxjs';
+import { switchMap} from 'rxjs';
 import { Component, inject, signal } from '@angular/core';
 import { ProfileHeaderComponent } from '../../ui/profile-header/profile-header.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,11 +7,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
 import { PostFeedComponent } from '@tt/posts';
-import { ProfileService } from '../../data';
-import { ChatService } from '@tt/chats';
-
-
-
+import { ChatService, ProfileService } from '@tt/data-access';
 
 
 @Component({

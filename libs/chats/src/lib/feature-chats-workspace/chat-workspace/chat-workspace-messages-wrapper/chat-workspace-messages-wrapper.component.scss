@@ -2,9 +2,12 @@
   display: grid;
   padding: 16px 20px;
   grid-template-rows: 1fr min-content;
+  gap: 20px;
 }
 
 .messages-wrapper {
   display: grid;
   gap: 12px;
+  overflow-y: auto;
+  max-height: 100%;
 }
