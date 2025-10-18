@@ -1,4 +1,4 @@
-import { Component, inject, ElementRef, Renderer2 } from '@angular/core';
+import { Component, inject, ElementRef, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import {  selectFilteredProfiles } from '@tt/data-access';
 export class SearchPageComponent {
   store = inject(Store)
   profiles = this.store.selectSignal(selectFilteredProfiles)
+  cdr = inject(ChangeDetectorRef)
 
   hostElement = inject(ElementRef);
   r2 = inject(Renderer2);
@@ -40,5 +41,9 @@ export class SearchPageComponent {
     const { top } = this.hostElement.nativeElement.getBoundingClientRect();
     const height = window.innerHeight - top - 24 - 24;
     this.r2.setStyle(this.hostElement.nativeElement, 'height', `${height}px`);
+  }
+
+  constructor() {
+    this.cdr.markForCheck()
   }
 }

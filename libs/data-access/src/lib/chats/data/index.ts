@@ -1,6 +1,4 @@
-import {ChatService} from './services/chats.service';
-export * from './interfaces/chats.interface'
+export * from './services';
+export * from './interfaces'
+export * from './store'
 
-export {
-  ChatService
-}

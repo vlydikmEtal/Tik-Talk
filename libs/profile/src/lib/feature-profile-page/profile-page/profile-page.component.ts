@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { switchMap} from 'rxjs';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { ProfileHeaderComponent } from '../../ui/profile-header/profile-header.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toObservable } from '@angular/core/rxjs-interop';
@@ -23,12 +23,14 @@ import { ChatService, ProfileService } from '@tt/data-access';
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfilePageComponent {
   profileService = inject(ProfileService);
   chatsService = inject(ChatService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  cdr = inject(ChangeDetectorRef)
 
   me$ = toObservable(this.profileService.me);
   subscribers$ = this.profileService.getSubscribersShortList(5);
@@ -50,5 +52,9 @@ export class ProfilePageComponent {
   async sendMessage(userId: number) {
     this.router.navigate(['/chats', 'new'], {queryParams: {userId}});
 
+  }
+
+  constructor() {
+    this.cdr.markForCheck()
   }
 }

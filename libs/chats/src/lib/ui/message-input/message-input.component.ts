@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import { Renderer2 } from '@angular/core';
@@ -14,10 +14,13 @@ import { ProfileService } from '@tt/data-access';
   imports: [AvatarCircleComponent, FormsModule, SvgIconComponent, NgIf],
   templateUrl: './message-input.component.html',
   styleUrl: './message-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageInputComponent {
   r2 = inject(Renderer2);
   me = inject(ProfileService).me;
+
+  cdr = inject(ChangeDetectorRef)
 
   @Output() submitted = new EventEmitter<string>();
 
@@ -34,5 +37,9 @@ export class MessageInputComponent {
 
     this.submitted.emit(this.postText);
     this.postText = '';
+  }
+
+  constructor() {
+    this.cdr.markForCheck()
   }
 }

@@ -1,5 +1,5 @@
 import { firstValueFrom, fromEvent, Subscription } from 'rxjs';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { ElementRef, Renderer2, AfterViewInit, OnDestroy } from '@angular/core';
 import { PostInputComponent } from '../../ui';
@@ -8,20 +8,20 @@ import { postActions, PostCreateDto, PostService, ProfileService, selectedPosts 
 import { Store } from '@ngrx/store';
 
 
-
-
-
 @Component({
   selector: 'app-post-feed',
   standalone: true,
   imports: [PostComponent, PostInputComponent],
   templateUrl: './post-feed.component.html',
   styleUrl: './post-feed.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostFeedComponent implements AfterViewInit, OnDestroy {
   postService = inject(PostService);
   profileService = inject(ProfileService);
   store = inject(Store)
+
+  cdr = inject(ChangeDetectorRef);
 
   feed = this.store.selectSignal(selectedPosts)
 
@@ -32,6 +32,8 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
 
   constructor() {
     this.store.dispatch(postActions.postsGet());
+
+    this.cdr.markForCheck()
   }
 
   ngAfterViewInit() {

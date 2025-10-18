@@ -1,10 +1,14 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
 import { RouterModule } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription, timer } from 'rxjs';
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
-import {ProfileService} from '@tt/data-access'
+import { ChatService, isErrorMessage, ProfileService } from '@tt/data-access';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService } from '@tt/auth';
+
+
 
 @Component({
   selector: 'app-sidebar',
@@ -14,36 +18,94 @@ import {ProfileService} from '@tt/data-access'
     CommonModule,
     SubscriberCardComponent,
     RouterModule,
-    ImgUrlPipe,
+    ImgUrlPipe
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarComponent {
-  ProfileService = inject(ProfileService);
-  subscribers$ = this.ProfileService.getSubscribersShortList();
+export class SidebarComponent implements OnInit {
+  profileService = inject(ProfileService);
+  chatService = inject(ChatService);
+  authService = inject(AuthService);
+  destroyRef = inject(DestroyRef);
 
-  me = this.ProfileService.me;
+  cdr = inject(ChangeDetectorRef);
+
+  subscribers$ = this.profileService.getSubscribersShortList();
+
+  unreadMessages = this.chatService.unreadMessagesCount;
+
+  me = this.profileService.me;
+
+
+  wsSubscribe!: Subscription;
 
   menuItems = [
     {
       label: 'Моя страница',
       icon: 'home',
-      link: 'profile/me',
+      link: 'profile/me'
     },
     {
       label: 'Чаты',
       icon: 'chat',
-      link: 'chats',
+      link: 'chats'
     },
     {
       label: 'Поиск',
       icon: 'search',
-      link: 'search',
-    },
+      link: 'search'
+    }
   ];
 
+
+  // reconnect() {
+  //   this.wsSubscribe.unsubscribe();
+  //
+  //   this.chatService.connectWs()
+  //     .pipe(takeUntilDestroyed(this.destroyRef))
+  //     .subscribe()
+  // }
+
+  async reconnect() {
+
+    console.log('реконект');
+    await firstValueFrom(this.profileService.getMe());
+    await firstValueFrom(timer(2000));
+
+    this.connectWs();
+  }
+
+  connectWs() {
+    this.wsSubscribe?.unsubscribe();
+
+    this.wsSubscribe = this.chatService
+      .connectWs()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe((message) => {
+          if (isErrorMessage(message)) {
+            console.log('Неверный токен епт');
+            this.reconnect();
+          }
+        });
+  }
+
   ngOnInit() {
-    firstValueFrom(this.ProfileService.getMe());
+    firstValueFrom(this.profileService.getMe());
+
+    this.connectWs();
+
+    // this.wsSubscribe = this.chatService.connectWs()
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe((message) => {
+    //     if (true) {
+    //       this.reconnect()
+    //     }
+    //   })
+  }
+
+  constructor() {
+    this.cdr.markForCheck()
   }
 }

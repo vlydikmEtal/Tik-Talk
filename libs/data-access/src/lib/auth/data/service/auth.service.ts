@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError, throwError } from 'rxjs';
-import { TokenResponce } from './auth.interface';
+import { TokenResponce } from '../interface/auth.interface';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({

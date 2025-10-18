@@ -12,12 +12,12 @@ export interface Chat {
 export interface Message {
   id: number;
   userFromId: number;
-  personalChatId: number;
+  personalChatId: string;
   text: string;
   createdAt: string;
   isRead: boolean;
-  updatedAt: string;
-  user?: Profile;
+  updatedAt?: string;
+  user?: Partial<Profile>;
   isMine?: boolean;
 }
 

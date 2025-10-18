@@ -2,12 +2,12 @@
   display: grid;
   grid-template-columns: 32px 1fr;
   gap: 12px;
-  height: min-content;
 }
 
 :host.is-mine {
   grid-template-columns: 1fr 32px;
   justify-self: end;
+  text-align: right;
 
   .message-container {
     order: -1;
@@ -38,5 +38,8 @@
   background-color: var(--message-color);
   font-weight: 500;
   color: var(--light-color);
-  width: min-content;
+  max-width: 200px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }

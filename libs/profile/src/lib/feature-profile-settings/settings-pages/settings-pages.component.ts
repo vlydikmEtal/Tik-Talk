@@ -1,6 +1,6 @@
 import { firstValueFrom } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { Component, inject, effect, ViewChild } from '@angular/core';
+import { Component, inject, effect, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AvatarUploadComponent, ProfileHeaderComponent } from '../../ui';
@@ -18,10 +18,12 @@ import { ProfileService } from '@tt/data-access';
   ],
   templateUrl: './settings-pages.component.html',
   styleUrl: './settings-pages.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsPagesComponent {
   fb = inject(FormBuilder);
   profileSerive = inject(ProfileService);
+  cdr = inject(ChangeDetectorRef)
 
   @ViewChild(AvatarUploadComponent) avatarUploader!: AvatarUploadComponent;
 
@@ -42,9 +44,10 @@ export class SettingsPagesComponent {
         stack: this.mergeStack(this.profileSerive.me()?.stack),
       });
     });
+
+    this.cdr.markForCheck()
   }
 
-  ngAfterViewInit() {}
 
   onSave() {
     this.form.markAllAsTouched();

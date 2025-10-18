@@ -1,12 +1,12 @@
 import { Router } from '@angular/router';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import {
   FormGroup,
   FormControl,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {AuthService} from '@tt/auth';
+import {AuthService} from '@tt/data-access';
 
 @Component({
   selector: 'app-login-page',
@@ -14,10 +14,13 @@ import {AuthService} from '@tt/auth';
   imports: [ReactiveFormsModule],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginPageComponent {
   AuthService = inject(AuthService);
   router = inject(Router);
+
+  cdr = inject(ChangeDetectorRef)
 
   isPasswordVisible = signal<boolean>(false);
 
@@ -34,5 +37,9 @@ export class LoginPageComponent {
         console.log(val);
       });
     }
+  }
+
+  constructor() {
+    this.cdr.markForCheck();
   }
 }

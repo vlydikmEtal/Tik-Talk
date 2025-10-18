@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { ChatsBtnComponent } from '../chats-btn/chats-btn.component';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -20,9 +20,12 @@ import { ChatService } from '@tt/data-access';
   ],
   templateUrl: './chats-list.component.html',
   styleUrl: './chats-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatsListComponent {
   chatsService = inject(ChatService);
+
+  cdr = inject(ChangeDetectorRef)
 
   filterChatsControl = new FormControl('');
 
@@ -40,4 +43,8 @@ export class ChatsListComponent {
       );
     })
   );
+
+  constructor() {
+    this.cdr.markForCheck()
+  }
 }

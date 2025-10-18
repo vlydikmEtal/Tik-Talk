@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DndDirective, SvgIconComponent } from '@tt/common-ui';
 
@@ -8,9 +8,12 @@ import { DndDirective, SvgIconComponent } from '@tt/common-ui';
   imports: [SvgIconComponent, DndDirective, FormsModule],
   templateUrl: './avatar-upload.component.html',
   styleUrl: './avatar-upload.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvatarUploadComponent {
   preview = signal<string>('/assets/imgs/avatar-placeholder.png');
+
+  cdr = inject(ChangeDetectorRef)
 
   avatar: File | null = null;
 
@@ -34,5 +37,9 @@ export class AvatarUploadComponent {
 
     reader.readAsDataURL(file);
     this.avatar = file;
+  }
+
+  constructor() {
+    this.cdr.markForCheck();
   }
 }

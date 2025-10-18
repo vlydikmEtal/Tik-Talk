@@ -1,11 +1,9 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CommentComponent, PostInputComponent } from '../../ui';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
 import { TimePipe } from '../../pipes/time.pipe';
 import { CommentCreateDto, Post, PostComment, PostService, ProfileService } from '@tt/data-access';
-
-
 
 
 @Component({
@@ -20,10 +18,13 @@ import { CommentCreateDto, Post, PostComment, PostService, ProfileService } from
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostComponent implements OnInit {
   post = input<Post>();
   comments = signal<PostComment[]>([]);
+
+  cdr = inject(ChangeDetectorRef)
 
   postService = inject(PostService);
   profileService = inject(ProfileService).me;
@@ -43,6 +44,13 @@ export class PostComponent implements OnInit {
     const comments = await firstValueFrom(
       this.postService.getCommentByPostId(this.post()!.id)
     );
+    console.log('All comments:', comments);
     this.comments.set(comments);
+  }
+
+  constructor() {
+    setInterval(() => {
+      this.cdr.markForCheck()
+    }, 1000)
   }
 }

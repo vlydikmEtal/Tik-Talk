@@ -4,11 +4,12 @@ import {
   HttpRequest,
   HttpHandlerFn,
 } from '@angular/common/http';
-import { AuthService } from './auth.service';
+
 import { catchError, throwError, switchMap } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs';
 import { tap } from 'rxjs';
+import { AuthService } from '@tt/data-access';
 
 let isRefreshing$ = new BehaviorSubject<boolean>(false);
 

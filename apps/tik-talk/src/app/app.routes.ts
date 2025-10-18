@@ -5,8 +5,7 @@ import { chatsRoutes } from '@tt/chats';
 import { LayoutComponent } from '@tt/layout';
 import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import { ProfileEffects, profileFeature } from '@tt/data-access';
-import { postActions, PostsEffects, postsFeature } from '../../../../libs/data-access/src/lib/posts/data/store';
+import { PostsEffects, postsFeature, ProfileEffects, profileFeature } from '@tt/data-access';
 
 
 export const routes: Routes = [

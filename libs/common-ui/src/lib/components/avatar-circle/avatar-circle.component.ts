@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { input } from '@angular/core';
 import { ImgUrlPipe } from '../../pipes';
 
@@ -8,7 +8,14 @@ import { ImgUrlPipe } from '../../pipes';
   imports: [ImgUrlPipe],
   templateUrl: './avatar-circle.component.html',
   styleUrl: './avatar-circle.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvatarCircleComponent {
   avatarUrl = input<string | null>();
+
+  cdr = inject(ChangeDetectorRef)
+
+  constructor() {
+    this.cdr.markForCheck()
+  }
 }

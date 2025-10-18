@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { Profile } from '../../../../../interfaces/src/lib/profile';
+import { Profile } from '@tt/interfaces/profile';
+
 
 
 

@@ -6,11 +6,13 @@ import {
   input,
   HostBinding,
   Output,
-  EventEmitter,
+  EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
-import { GlobalStoreService } from '@tt/shared';
+import { GlobalStoreService } from '@tt/data-access';
+
+
 
 
 
@@ -22,12 +24,15 @@ import { GlobalStoreService } from '@tt/shared';
   imports: [AvatarCircleComponent, CommonModule, SvgIconComponent, FormsModule],
   templateUrl: './post-input.component.html',
   styleUrl: './post-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostInputComponent {
   r2 = inject(Renderer2);
   profile = inject(GlobalStoreService).me;
   isCommentInput = input(false);
   postId = input<number>(0);
+
+  cdr = inject(ChangeDetectorRef)
 
   @Output() submitted = new EventEmitter<string>();
 
@@ -49,5 +54,9 @@ export class PostInputComponent {
     if (!text) return;
     this.submitted.emit(text);
     this.postText = '';
+  }
+
+  constructor() {
+    this.cdr.markForCheck();
   }
 }

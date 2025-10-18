@@ -1,5 +1,5 @@
 import { RouterOutlet } from '@angular/router';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 
 
@@ -9,5 +9,12 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   imports: [RouterOutlet, SidebarComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LayoutComponent {}
+export class LayoutComponent {
+  cdr = inject(ChangeDetectorRef)
+
+  constructor() {
+    this.cdr.markForCheck()
+  }
+}
