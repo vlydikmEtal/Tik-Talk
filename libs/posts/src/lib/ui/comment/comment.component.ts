@@ -16,11 +16,6 @@ import { PostComment } from '@tt/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CommentComponent {
-  cdr = inject(ChangeDetectorRef)
-
   comment = input<PostComment>();
 
-  constructor() {
-    this.cdr.markForCheck();
-  }
 }

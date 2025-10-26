@@ -1,0 +1,10 @@
+.username-input {
+  position: relative;
+}
+
+.username-input svg {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+}

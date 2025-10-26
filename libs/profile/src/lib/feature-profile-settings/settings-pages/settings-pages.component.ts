@@ -22,7 +22,7 @@ import { ProfileService } from '@tt/data-access';
 })
 export class SettingsPagesComponent {
   fb = inject(FormBuilder);
-  profileSerive = inject(ProfileService);
+  profileService = inject(ProfileService);
   cdr = inject(ChangeDetectorRef)
 
   @ViewChild(AvatarUploadComponent) avatarUploader!: AvatarUploadComponent;
@@ -39,9 +39,9 @@ export class SettingsPagesComponent {
     effect(() => {
       //@ts-ignore
       this.form.patchValue({
-        ...this.profileSerive.me(),
+        ...this.profileService.me(),
         //@ts-ignore
-        stack: this.mergeStack(this.profileSerive.me()?.stack),
+        stack: this.mergeStack(this.profileService.me()?.stack),
       });
     });
 
@@ -57,14 +57,14 @@ export class SettingsPagesComponent {
 
     if (this.avatarUploader.avatar) {
       firstValueFrom(
-        this.profileSerive.uploadAvatar(this.avatarUploader.avatar)
+        this.profileService.uploadAvatar(this.avatarUploader.avatar)
       );
     }
 
 
     firstValueFrom(
       // @ts-ignore
-      this.profileSerive.patchProfile({
+      this.profileService.patchProfile({
         ...this.form.value,
         stack: this.splitStack(this.form.value.stack),
       })

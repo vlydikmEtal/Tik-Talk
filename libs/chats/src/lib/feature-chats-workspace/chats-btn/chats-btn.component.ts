@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { AvatarCircleComponent } from '@tt/common-ui';
 import { LastMessageRes } from '@tt/data-access';
 import { TimePipe } from '@tt/posts';
@@ -15,10 +15,4 @@ import { DatePipe, NgIf, SlicePipe } from '@angular/common';
 })
 export class ChatsBtnComponent {
   chat = input<LastMessageRes>();
-
-  cdr = inject(ChangeDetectorRef)
-
-  constructor() {
-    this.cdr.markForCheck()
-  }
 }

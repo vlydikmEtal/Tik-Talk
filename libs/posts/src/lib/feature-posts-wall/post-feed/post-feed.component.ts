@@ -21,7 +21,6 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
   profileService = inject(ProfileService);
   store = inject(Store)
 
-  cdr = inject(ChangeDetectorRef);
 
   feed = this.store.selectSignal(selectedPosts)
 
@@ -32,8 +31,6 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
 
   constructor() {
     this.store.dispatch(postActions.postsGet());
-
-    this.cdr.markForCheck()
   }
 
   ngAfterViewInit() {

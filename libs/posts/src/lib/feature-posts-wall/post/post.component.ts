@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { CommentComponent, PostInputComponent } from '../../ui';
 import { AvatarCircleComponent, SvgIconComponent } from '@tt/common-ui';
@@ -14,7 +14,7 @@ import { CommentCreateDto, Post, PostComment, PostService, ProfileService } from
     TimePipe,
     SvgIconComponent,
     PostInputComponent,
-    CommentComponent,
+    CommentComponent
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
@@ -24,7 +24,6 @@ export class PostComponent implements OnInit {
   post = input<Post>();
   comments = signal<PostComment[]>([]);
 
-  cdr = inject(ChangeDetectorRef)
 
   postService = inject(PostService);
   profileService = inject(ProfileService).me;
@@ -37,20 +36,15 @@ export class PostComponent implements OnInit {
     const dto: CommentCreateDto = {
       text,
       authorId: this.profileService()!.id,
-      postId: this.post()!.id,
+      postId: this.post()!.id
     };
 
     await firstValueFrom(this.postService.createComment(dto));
     const comments = await firstValueFrom(
       this.postService.getCommentByPostId(this.post()!.id)
     );
-    console.log('All comments:', comments);
+
     this.comments.set(comments);
   }
 
-  constructor() {
-    setInterval(() => {
-      this.cdr.markForCheck()
-    }, 1000)
-  }
 }

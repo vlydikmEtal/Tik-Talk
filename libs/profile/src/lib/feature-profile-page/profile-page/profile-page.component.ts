@@ -7,7 +7,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
 import { PostFeedComponent } from '@tt/posts';
-import { ChatService, ProfileService } from '@tt/data-access';
+import { ProfileService } from '@tt/data-access';
 
 
 @Component({
@@ -27,7 +27,6 @@ import { ChatService, ProfileService } from '@tt/data-access';
 })
 export class ProfilePageComponent {
   profileService = inject(ProfileService);
-  chatsService = inject(ChatService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   cdr = inject(ChangeDetectorRef)
@@ -51,10 +50,6 @@ export class ProfilePageComponent {
 
   async sendMessage(userId: number) {
     this.router.navigate(['/chats', 'new'], {queryParams: {userId}});
-
   }
 
-  constructor() {
-    this.cdr.markForCheck()
-  }
 }

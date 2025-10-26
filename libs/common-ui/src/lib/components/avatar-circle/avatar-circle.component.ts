@@ -13,9 +13,4 @@ import { ImgUrlPipe } from '../../pipes';
 export class AvatarCircleComponent {
   avatarUrl = input<string | null>();
 
-  cdr = inject(ChangeDetectorRef)
-
-  constructor() {
-    this.cdr.markForCheck()
-  }
 }

@@ -18,8 +18,6 @@ export class ChatsPageComponent {
   cdr = inject(ChangeDetectorRef);
 
   constructor() {
-    this.cdr.markForCheck();
-
     this.#chatService.connectWs()
       .pipe(takeUntilDestroyed())
       .subscribe();

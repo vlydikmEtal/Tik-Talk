@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { filter, of, switchMap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ChatWorkspaceHeaderComponent } from './chat-workspace-header/chat-workspace-header.component';
 import { ChatService } from '@tt/data-access';
 import {
@@ -28,7 +28,6 @@ export class ChatWorkspaceComponent {
   router = inject(Router);
   chatsService = inject(ChatService);
 
-  cdr = inject(ChangeDetectorRef)
 
   activeChat$ = this.route.params.pipe(
     switchMap(({ id }) => {
@@ -49,7 +48,4 @@ export class ChatWorkspaceComponent {
     })
   );
 
-  constructor() {
-    this.cdr.markForCheck()
-  }
 }

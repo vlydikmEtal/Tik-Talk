@@ -6,7 +6,7 @@ import {
   input,
   OnDestroy,
   Renderer2,
-  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef
+  AfterViewInit, ChangeDetectionStrategy
 } from '@angular/core';
 import {
   fromEvent,
@@ -15,7 +15,7 @@ import {
 import { debounceTime } from 'rxjs/operators';
 import { ChatWorkspaceMessageComponent } from './chat-workspace-message/chat-workspace-message.component';
 import { MessageInputComponent } from '../../../ui';
-import { Chat, ChatService, Message } from '@tt/data-access';
+import { Chat, ChatService } from '@tt/data-access';
 
 @Component({
   selector: 'app-chat-workspace-messages-wrapper',
@@ -30,7 +30,6 @@ export class ChatWorkspaceMessagesWrapperComponent implements AfterViewInit, OnD
   chat = input.required<Chat>();
   messages = this.chatsService.groupedActiveMessages;
 
-  cdr = inject(ChangeDetectorRef)
 
   #resizeSub?: Subscription;
   @ViewChild('messagesWrapper') messagesWrapper!: ElementRef<HTMLDivElement>;
@@ -68,10 +67,6 @@ export class ChatWorkspaceMessagesWrapperComponent implements AfterViewInit, OnD
       this.messagesWrapper.nativeElement.scrollTop =
         this.messagesWrapper.nativeElement.scrollHeight;
     });
-  }
-
-  constructor() {
-    this.cdr.markForCheck();
   }
 }
 

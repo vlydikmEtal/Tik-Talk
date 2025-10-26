@@ -32,7 +32,6 @@ export class PostInputComponent {
   isCommentInput = input(false);
   postId = input<number>(0);
 
-  cdr = inject(ChangeDetectorRef)
 
   @Output() submitted = new EventEmitter<string>();
 
@@ -54,9 +53,5 @@ export class PostInputComponent {
     if (!text) return;
     this.submitted.emit(text);
     this.postText = '';
-  }
-
-  constructor() {
-    this.cdr.markForCheck();
   }
 }

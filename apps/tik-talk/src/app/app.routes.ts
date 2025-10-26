@@ -6,6 +6,7 @@ import { LayoutComponent } from '@tt/layout';
 import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { PostsEffects, postsFeature, ProfileEffects, profileFeature } from '@tt/data-access';
+import { ExperimentalComponent, FormExperimentComponent } from '@tt/experimental';
 
 
 export const routes: Routes = [
@@ -48,5 +49,9 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent
+  },
+  {
+    path: 'forms',
+    component: FormExperimentComponent
   }
 ];

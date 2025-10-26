@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { AvatarCircleComponent } from '@tt/common-ui';
 import { Profile } from '@tt/interfaces/profile';
 
@@ -14,11 +14,5 @@ import { Profile } from '@tt/interfaces/profile';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileHeaderComponent {
-  cdr = inject(ChangeDetectorRef)
-
-  profile = input<Profile>();
-
-  constructor() {
-    this.cdr.markForCheck()
-  }
+  profile = input<Profile | null>();
 }

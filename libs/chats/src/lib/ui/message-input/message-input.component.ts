@@ -39,7 +39,4 @@ export class MessageInputComponent {
     this.postText = '';
   }
 
-  constructor() {
-    this.cdr.markForCheck()
-  }
 }

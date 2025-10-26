@@ -18,6 +18,8 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "@ng-web-apis/common": "^4.12.2",
+    "@ng-web-apis/intersection-observer": "^4.12.2",
     "@ngrx/effects": "^18.1.1",
     "@ngrx/entity": "^18.1.1",
     "@ngrx/router-store": "^18.1.1",
@@ -25,6 +27,7 @@
     "@ngxs/store": "^18.1.6",
     "date-fns": "^4.1.0",
     "ngx-cookie-service": "^18.0.0",
+    "ngx-infinite-scroll": "^18.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
@@ -70,5 +73,8 @@
     "ts-node": "10.9.1",
     "typescript": "~5.5.2",
     "typescript-eslint": "^8.40.0"
+  },
+  "resolutions": {
+    "rollup": "npm:@rollup/wasm-node"
   }
 }

@@ -8,7 +8,6 @@ import { ChatWsMessage } from '../interfaces/chat-ws-message.interface';
 import { isErrorMessage, isNewMessage, isUnreadMessage } from '../interfaces/type-guards';
 import { ChatWsRxjsService } from './chat-ws-rxjs.service';
 import { AuthService } from '../../../auth/data';
-import { Profile } from '@tt/interfaces/profile';
 
 
 @Injectable({
@@ -25,7 +24,7 @@ export class ChatService {
   unreadMessagesCount = signal(0);
   groupedActiveMessages = signal<[string, Message[]][]>([]);
 
-  baseApiUrl = 'https://icherniakov.ru/yt-course/';
+  baseApiUrl = '/yt-course/';
   chatsUrl = `${this.baseApiUrl}chat/`;
   messageUrl = `${this.baseApiUrl}message/`;
 
@@ -53,8 +52,10 @@ export class ChatService {
     }
 
     if (isNewMessage(message)) {
-      const myProfile = this.me()!;
+      const myProfile = this.me()!
       const companion = this.activeCompanion;
+
+      if (!myProfile || !companion) return;
 
       const newMessage: Message = {
         id: message.data.id,
@@ -66,7 +67,7 @@ export class ChatService {
         isMine: message.data.author === myProfile.id,
         user: message.data.author === myProfile.id
           ? myProfile
-          : companion ?? { // сюда почти не должно доходить
+          : companion ?? {
           id: message.data.author,
           username: 'Собеседник',
           avatarUrl: null,
@@ -118,7 +119,6 @@ export class ChatService {
             ? chat.userSecond
             : chat.userFirst;
 
-        // сохраняем собеседника в сервисе
         this.activeCompanion = companion;
 
         this.activeChatMessages.set(patchedMessages);
