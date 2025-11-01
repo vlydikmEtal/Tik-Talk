@@ -24,7 +24,11 @@
 .tt-form-input {
   border-bottom: 1px solid var(--light-color);
 }
-
+.tt-form-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
 .two-colunns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -44,6 +48,7 @@
   text-decoration: none;
   text-align: center;
 }
+
 
 .profile-form__left {
   display: flex;

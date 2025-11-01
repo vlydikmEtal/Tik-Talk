@@ -10,6 +10,7 @@
   --dark-hover-color: #161616;
   --light-transparent-color: rgba(255, 255, 255, 0.75);
   --message-color: #404040;
+  --red-color: #d3201b;
 
   --light-border: 1px solid var(--light-color);
 }
@@ -43,7 +44,6 @@ body {
 }
 
 .btn {
-  border: none;
   width: 100%;
   background: var(--primary-color);
   color: var(--dark-color);
@@ -69,6 +69,11 @@ body {
 .svg16 {
   width: 16px;
   height: 16px;
+}
+
+.svg10 {
+  width: 10px;
+  height: 10px;
 }
 
 .btn--shadow {
@@ -145,6 +150,10 @@ body {
   line-height: 21px;
   font-family: 'JetBrains Mono';
   color: var(--light-color);
+
+  &.error {
+    border: 1px solid var(--red-color);
+  }
 }
 
 .tt-form-label {
@@ -177,6 +186,6 @@ body {
 }
 
 .tt-textarea {
-  height: 84px;
+  height: 44px;
   resize: none;
 }

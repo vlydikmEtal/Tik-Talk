@@ -1,13 +1,43 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, FormRecord, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component, ElementRef,
+  inject, Renderer2
+
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormRecord,
+  ReactiveFormsModule, ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MockService, Feature } from './mock.service';
 import { KeyValuePipe } from '@angular/common';
+import { fromEvent, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 
 enum ReciverType {
   PERSON = 'PERSON',
   LEGAL = 'LEGAL',
 }
+
+export const dateRangeValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+  const begin = group.get('dateBegin')?.value;
+  const end = group.get('dateEnd')?.value;
+
+  if (!begin || !end) return null;
+
+  const beginDate = new Date(begin);
+  const endDate = new Date(end);
+
+  return beginDate > endDate ? { dateRange: true } : null;
+};
 
 interface Address {
   city?: string;
@@ -18,10 +48,10 @@ interface Address {
 
 function getAddressForm(initialValue: Address = {}) {
   return new FormGroup({
-    city: new FormControl<string>(initialValue.city ?? ''),
-    street: new FormControl<string>(initialValue.street ?? ''),
-    building: new FormControl<number | null>(initialValue.building ?? null),
-    apartment: new FormControl<number | null>(initialValue.apartment ?? null)
+    city: new FormControl<string>(initialValue.city ?? '', Validators.required),
+    street: new FormControl<string>(initialValue.street ?? '', Validators.required),
+    building: new FormControl<number | null>(initialValue.building ?? null, Validators.required),
+    apartment: new FormControl<number | null>(initialValue.apartment ?? null, Validators.required)
   });
 }
 
@@ -36,76 +66,91 @@ function getAddressForm(initialValue: Address = {}) {
   styleUrl: './forms-experiment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormExperimentComponent {
+export class FormExperimentComponent implements AfterViewInit {
   ReciverType = ReciverType;
-  // #fb = inject(FormBuilder);
-
+  cdr = inject(ChangeDetectorRef);
+  hostElement = inject(ElementRef);
+  r2 = inject(Renderer2);
   mockService = inject(MockService);
-  features: Feature[] = []
 
+  #resizeSub?: Subscription;
+  features: Feature[] = [];
 
   form = new FormGroup({
     type: new FormControl<ReciverType>(ReciverType.PERSON),
     name: new FormControl<string>('', Validators.required),
     inn: new FormControl<string>(''),
-    lastName: new FormControl<string>('Миронов'),
+    lastName: new FormControl<string>('', Validators.required),
+    dateBegin: new FormControl<string>('', Validators.required),
+    dateEnd: new FormControl<string>('', Validators.required),
     addresses: new FormArray([getAddressForm()]),
     feature: new FormRecord({})
+  }, { validators: dateRangeValidator });
 
-  });
+  ngAfterViewInit() {
+    this.resizeFeed();
+    this.#resizeSub = fromEvent(window, 'resize')
+      .pipe(debounceTime(200))
+      .subscribe(() => this.resizeFeed());
+  }
 
-  // form = this.#fb.group({
-  //   type: this.#fb.control<ReciverType>(ReciverType.PERSON),
-  //   name: this.#fb.control<string>(''),
-  //   inn: this.#fb.control<string>(''),
-  //   lastName: this.#fb.control<string>(''),
-  //   address: this.#fb.group({
-  //     city: this.#fb.control<string>(''),
-  //     street: this.#fb.control<string>(''),
-  //     building: this.#fb.control<number | null>(null),
-  //     apartment: this.#fb.control<number | null>(null)
-  //   })
-  // });
+  resizeFeed() {
+    const { top } = this.hostElement.nativeElement.getBoundingClientRect();
+    const height = window.innerHeight - top - 48;
+    this.r2.setStyle(this.hostElement.nativeElement, 'height', `${height}px`);
+  }
+
+  ngOnDestroy() {
+    this.#resizeSub?.unsubscribe();
+  }
 
   constructor() {
+    // Загрузка адресов
     this.mockService.getAddresses()
       .pipe(takeUntilDestroyed())
       .subscribe(addrs => {
-        this.form.controls.addresses.clear();
-
+        const addressesArray = this.form.controls.addresses as FormArray;
+        addressesArray.clear();
         for (const addr of addrs) {
-          this.form.controls.addresses.push(getAddressForm(addr));
+          addressesArray.push(getAddressForm(addr));
         }
-
-        // this.form.controls.addresses.setControl(1, getAddressForm())
-
-
+        this.cdr.markForCheck();
       });
 
+    // Загрузка дополнительных фич
     this.mockService.getFeature()
       .pipe(takeUntilDestroyed())
       .subscribe(features => {
         this.features = features;
-
         for (const feature of features) {
           this.form.controls.feature.addControl(
             feature.code,
             new FormControl(feature.value)
-          )
+          );
         }
-      })
+        this.cdr.markForCheck();
+      });
 
+    // Валидаторы для типа получателя
     this.form.controls.type.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(val => {
-        this.form.controls.inn.clearValidators();
-
+        const innControl = this.form.controls.inn;
+        innControl.clearValidators();
         if (val === ReciverType.LEGAL) {
-          this.form.controls.inn.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
+          innControl.setValidators([Validators.required, Validators.minLength(10), Validators.maxLength(10)]);
         }
+        innControl.updateValueAndValidity({ emitEvent: false });
+        this.cdr.markForCheck();
       });
 
-    this.form.controls.lastName.disable();
+    // Валидатор диапазона дат при изменении значений
+    this.form.controls.dateBegin.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.form.updateValueAndValidity({ emitEvent: false }));
+    this.form.controls.dateEnd.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.form.updateValueAndValidity({ emitEvent: false }));
   }
 
   onSubmit() {
@@ -118,12 +163,14 @@ export class FormExperimentComponent {
   }
 
   addAddress() {
-    this.form.controls.addresses.insert(0, getAddressForm());
+    (this.form.controls.addresses as FormArray).insert(0, getAddressForm());
+    this.cdr.markForCheck();
   }
 
   deleteAddress(index: number) {
-    this.form.controls.addresses.removeAt(index, { emitEvent: false });
+    (this.form.controls.addresses as FormArray).removeAt(index, { emitEvent: false });
+    this.cdr.markForCheck();
   }
 
-  sort = () => 0
+  sort = () => 0;
 }

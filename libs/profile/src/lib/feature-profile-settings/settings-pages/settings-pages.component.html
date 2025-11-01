@@ -30,6 +30,9 @@
         class="tt-form-input tt-textarea"
         rows="4"
       ></textarea>
+
+
+
     </label>
 
     <label class="tt-form-label">
@@ -39,9 +42,11 @@
     </label>
 
     <label class="tt-form-label">
-      <span class="tt-form-label__text">Навыки</span>
+      <span class="tt-form-label__text medium-text ">Навыки (Стэк)</span>
 
-      <input type="text" class="tt-form-input" formControlName="stack" />
+      <tt-stack-input formControlName="stack"></tt-stack-input>
+
+      <tt-address-input formControlName="city"></tt-address-input>
     </label>
 
     <div>

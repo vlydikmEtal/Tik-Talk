@@ -1,12 +1,12 @@
 import { Router } from '@angular/router';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormGroup,
   FormControl,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
-import {AuthService} from '@tt/data-access';
+import { AuthService } from '@tt/data-access';
 import { TtInputComponent } from '@tt/common-ui';
 
 @Component({
@@ -17,23 +17,23 @@ import { TtInputComponent } from '@tt/common-ui';
   styleUrl: './login-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginPageComponent {
+export class LoginPageComponent implements OnInit {
   AuthService = inject(AuthService);
   router = inject(Router);
+  showPassword = signal(false);
 
-  cdr = inject(ChangeDetectorRef)
+  cdr = inject(ChangeDetectorRef);
 
-  isPasswordVisible = signal<boolean>(false);
 
   form = new FormGroup({
-    username: new FormControl<string | null>(null, Validators.required),
-    password: new FormControl<string | null>(null, Validators.required),
+    username: new FormControl<string | null>('againstallodds6', Validators.required),
+    password: new FormControl<string | null>(null, Validators.required)
   });
 
   ngOnInit() {
     this.form.valueChanges.subscribe(val => {
       console.log(val);
-    })
+    });
   }
 
   onSubmit() {
@@ -44,6 +44,10 @@ export class LoginPageComponent {
         console.log(val);
       });
     }
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword.update(v => !v);
   }
 
 }

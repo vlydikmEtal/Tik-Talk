@@ -5,6 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AvatarUploadComponent, ProfileHeaderComponent } from '../../ui';
 import { ProfileService } from '@tt/data-access';
+import { AddressInputComponent, StackInputComponent, SvgIconComponent } from '@tt/common-ui';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { ProfileService } from '@tt/data-access';
     ReactiveFormsModule,
     RouterLink,
     AvatarUploadComponent,
+    StackInputComponent,
+    AddressInputComponent
   ],
   templateUrl: './settings-pages.component.html',
   styleUrl: './settings-pages.component.scss',
@@ -33,6 +36,7 @@ export class SettingsPagesComponent {
     username: [{ value: '', disabled: true }, Validators.required],
     description: [''],
     stack: [''],
+    city: [null]
   });
 
   constructor() {
@@ -40,8 +44,6 @@ export class SettingsPagesComponent {
       //@ts-ignore
       this.form.patchValue({
         ...this.profileService.me(),
-        //@ts-ignore
-        stack: this.mergeStack(this.profileService.me()?.stack),
       });
     });
 
@@ -66,22 +68,9 @@ export class SettingsPagesComponent {
       // @ts-ignore
       this.profileService.patchProfile({
         ...this.form.value,
-        stack: this.splitStack(this.form.value.stack),
       })
     );
   }
 
-  splitStack(stack: string | null | string[] | undefined): string[] {
-    if (!stack) return [];
-    if (Array.isArray(stack)) return stack;
 
-    return stack.split(',');
-  }
-
-  mergeStack(stack: string | null | string[] | undefined) {
-    if (!stack) return '';
-    if (Array.isArray(stack)) return stack.join(',');
-
-    return stack;
-  }
 }

@@ -1,19 +1,23 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DndDirective, SvgIconComponent } from '@tt/common-ui';
+import { DndDirective, ImgUrlPipe, SvgIconComponent } from '@tt/common-ui';
+import { ProfileService } from '@tt/data-access';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-avatar-upload',
   standalone: true,
-  imports: [SvgIconComponent, DndDirective, FormsModule],
+  imports: [SvgIconComponent, DndDirective, FormsModule, ImgUrlPipe],
   templateUrl: './avatar-upload.component.html',
   styleUrl: './avatar-upload.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvatarUploadComponent {
+  profileService = inject(ProfileService);
+
   preview = signal<string>('/assets/imgs/avatar-placeholder.png');
 
-  cdr = inject(ChangeDetectorRef)
+  cdr = inject(ChangeDetectorRef);
 
   avatar: File | null = null;
 
@@ -40,6 +44,14 @@ export class AvatarUploadComponent {
   }
 
   constructor() {
-    this.cdr.markForCheck();
+    this.profileService
+      .getMe()
+      .pipe(takeUntilDestroyed())
+      .subscribe(profile => {
+        if (profile.avatarUrl) {
+          this.preview.set(profile.avatarUrl);
+        }
+        this.cdr.markForCheck();
+      });
   }
 }

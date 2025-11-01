@@ -6,7 +6,7 @@ import { LayoutComponent } from '@tt/layout';
 import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { PostsEffects, postsFeature, ProfileEffects, profileFeature } from '@tt/data-access';
-import { ExperimentalComponent, FormExperimentComponent } from '@tt/experimental';
+import { FormExperimentComponent } from '@tt/experimental';
 
 
 export const routes: Routes = [
@@ -40,6 +40,10 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'experimental',
+        component: FormExperimentComponent
+      },
+      {
         path: 'chats',
         loadChildren: () => chatsRoutes
       }
@@ -49,9 +53,6 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginPageComponent
-  },
-  {
-    path: 'forms',
-    component: FormExperimentComponent
   }
+
 ];

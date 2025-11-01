@@ -40,14 +40,14 @@ export class PostFeedComponent implements AfterViewInit, OnDestroy {
       .subscribe(() => this.resizeFeed());
   }
 
-  ngOnDestroy() {
-    this.#resizeSub?.unsubscribe();
-  }
-
   resizeFeed() {
     const { top } = this.hostElement.nativeElement.getBoundingClientRect();
     const height = window.innerHeight - top - 48;
     this.r2.setStyle(this.hostElement.nativeElement, 'height', `${height}px`);
+  }
+
+  ngOnDestroy() {
+    this.#resizeSub?.unsubscribe();
   }
 
   async onPostCreated(text: string) {

@@ -1,4 +1,12 @@
-import { Component, forwardRef, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  inject,
+  input,
+  signal
+} from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -10,6 +18,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModu
   ],
   templateUrl: './tt-input.component.html',
   styleUrl: './tt-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -18,29 +27,53 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModu
     }
   ]
 })
-export class TtInputComponent implements  ControlValueAccessor {
-  type = input<'text' | 'password'>('text')
-  placeholder = input<string>()
+export class TtInputComponent implements ControlValueAccessor {
+  type = input<'text' | 'password'>('text');
+  placeholder = input<string>('');
+
+  cdr = inject(ChangeDetectorRef)
+
+  showIcon = input<boolean>(false)
+
+  disabled = signal(false);
+  showPassword = signal(false);
+
+  value: string | null = null;
 
   onChange: any
+  onTouched: any
 
-  value: string | null = null
+  writeValue(val: string | null): void {
+    this.value = val;
 
-  writeValue(val: string | null) {
-    console.log(val);
+    this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: any) {
-    this.onChange = fn
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
-  setDisabledState(isDisabled: boolean) {
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 
-  onModelChange(val: string | null ) {
-    this.onChange(val)
+  onModelChange(val: string | null): void {
+    this.value = val;
+    this.onChange(val);
+
+    this.cdr.markForCheck();
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword.update(v => !v);
+  }
+
+  getInputType(): string {
+    if (this.type() !== 'password') return this.type();
+    return this.showPassword() ? 'text' : 'password';
   }
 }

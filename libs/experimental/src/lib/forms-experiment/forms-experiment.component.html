@@ -1,5 +1,5 @@
 <form class="experimental-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <h4 class="h4 mb16">Информация о доставке</h4>
+  <h4 class="h4 mb16">Информация о верстке</h4>
 
   <label class="tt-control-label mb16">
     Тип получателя
@@ -11,16 +11,18 @@
 
   <label class="tt-control-label mb16">
     Имя
+
     <input
       formControlName="name"
       class="tt-input"
       type="text"
       placeholder="Введите имя"
+      [class.error]="form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)"
     >
   </label>
 
   @if (form.controls.name.touched && form.controls.name.hasError('required')) {
-    <small>Это поле обязательно!</small>
+    <small class="tt-input-error">Это поле обязательно!</small>
   }
 
   @if (form.controls.type.value === ReciverType.LEGAL) {
@@ -31,8 +33,10 @@
         class="tt-input"
         type="text"
         placeholder="Введите ИНН"
+        [class.error]="form.controls.inn.invalid && (form.controls.inn.touched || form.controls.inn.dirty)"
       >
     </label>
+
   } @else {
     <label class="tt-control-label mb16">
       Фамилия
@@ -41,9 +45,51 @@
         class="tt-input"
         type="text"
         placeholder="Введите фамилию"
+        [class.error]="form.controls.lastName.invalid && (form.controls.lastName.touched || form.controls.lastName.dirty)"
       >
     </label>
   }
+
+  @if (form.controls.inn.touched && form.controls.inn.hasError('required') ||
+  form.controls.lastName.touched && form.controls.lastName.hasError('required')) {
+    <small class="tt-input-error">Это поле обязательно!</small>
+  }
+
+  <label class="tt-control-label mb16">
+    Дата начала
+    <input
+      type="date"
+      formControlName="dateBegin"
+      class="tt-input"
+      [class.error]="
+      (form.controls.dateBegin.invalid && (form.controls.dateBegin.touched || form.controls.dateBegin.dirty)) ||
+      (form.hasError('dateRange') && form.controls.dateBegin.touched && form.controls.dateEnd.touched)
+    "
+    >
+  </label>
+
+  <label class="tt-control-label mb16">
+    Дата окончания
+    <input
+      type="date"
+      formControlName="dateEnd"
+      class="tt-input"
+      [class.error]="
+      (form.controls.dateEnd.invalid && (form.controls.dateEnd.touched || form.controls.dateEnd.dirty)) ||
+      (form.hasError('dateRange') && form.controls.dateBegin.touched && form.controls.dateEnd.touched)
+    "
+    >
+  </label>
+
+  @if ((form.controls.dateBegin.touched && form.controls.dateBegin.hasError('required')) ||
+  (form.controls.dateEnd.touched && form.controls.dateEnd.hasError('required'))) {
+    <small class="tt-input-error">Обе даты обязательны!</small>
+  }
+
+  @if (form.hasError('dateRange') && form.controls.dateBegin.touched && form.controls.dateEnd.touched) {
+    <small class="tt-input-error">Дата начала не может быть позже даты окончания</small>
+  }
+
 
   <div>
     <div style="display:flex; justify-content: space-between">
